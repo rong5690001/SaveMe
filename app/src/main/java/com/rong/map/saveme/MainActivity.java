@@ -57,22 +57,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.saveBtn:
-                if(canSave()){
+                if (canSave()) {
                     sendSMS(mPhone.getText().toString(), mContent.getText().toString());
                 } else {
                     Toast.makeText(MainActivity.this,
                             "请输入完成内容", Toast.LENGTH_SHORT)
                             .show();
                 }
+                //TODO
+                Intent intent = new Intent(this, LockActivity.class);
+                startActivity(intent);
                 break;
         }
     }
 
-    private void initSMS(){
+    private void initSMS() {
         //处理返回的发送状态
         String SENT_SMS_ACTION = "SENT_SMS_ACTION";
         Intent sentIntent = new Intent(SENT_SMS_ACTION);
-        sentPI= PendingIntent.getBroadcast(this, 0, sentIntent,
+        sentPI = PendingIntent.getBroadcast(this, 0, sentIntent,
                 0);
         // register the Broadcast Receivers
         this.registerReceiver(new BroadcastReceiver() {
@@ -113,10 +116,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 直接调用短信接口发短信
+     *
      * @param phoneNumber
      * @param message
      */
-    public void sendSMS(String phoneNumber,String message){
+    public void sendSMS(String phoneNumber, String message) {
         SharePreferencesManager.putContent(mContent.getText().toString());
         //获取短信管理器
         android.telephony.SmsManager smsManager = android.telephony.SmsManager.getDefault();
@@ -127,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private boolean canSave(){
-        if(TextUtils.isEmpty(mPhone.getText().toString())) return false;
-        if(TextUtils.isEmpty(mContent.getText().toString())) return false;
+    private boolean canSave() {
+        if (TextUtils.isEmpty(mPhone.getText().toString())) return false;
+        if (TextUtils.isEmpty(mContent.getText().toString())) return false;
         return true;
     }
 }
