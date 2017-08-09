@@ -3,6 +3,7 @@
     package="com.rong.map.saveme">
 
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".SmApplication"
@@ -20,6 +21,7 @@
         </activity>
         <activity android:name=".LockActivity">
         </activity>
+        <service android:name=".service.LockService"/>
     </application>
 
 </manifest>
