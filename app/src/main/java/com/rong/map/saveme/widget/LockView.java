@@ -5,42 +5,48 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.rong.map.saveme.model.CusPoint;
+import com.rong.map.saveme.utils.CstUtils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Administrator on 2017/8/9/009.
  */
 
 public class LockView extends View {
-
-    private static final int DEFAULT_SELECT_COLOR = Color.GREEN;
+    private static final int DEFAULT_SELECT_COLOR = Color.parseColor("#a3e9a4");
+    private static final int STATES_NO = -1;
+    private static final int STATES_ACTIONDOWN = 0;
+    private static final int STATES_ACTIONMOVE = 1;
+    private static final int STATES_ACTIONUP = 2;
+    private static final int STATES_SUCCEED = 3;
+    private static final int STATES_ERROR = 4;
 
     Paint mSourcePaint;
     Paint mSelectedPaint;
     Paint mLinePaint;
     int viewWidth, viewHeight;
-    //    int[] circelX = new int[3];//X坐标
-//    int[] circelY = new int[3];//Y坐标
-    Point[][] points = new Point[3][3];
+    CusPoint[] points = new CusPoint[9];
     int radius = 20;
     float strokeWidth = 2.5f;
-    List<Point> selectedPoints = new ArrayList<>();
     int selectedColor = DEFAULT_SELECT_COLOR;
     boolean isDrawing = false;//正在画图案
-    Set<Integer> selectedIndexs = new HashSet<>();
+    List<Integer> selectedIndexs = new ArrayList<>();
+    OnLockListener onLockListener;
 
+    float eventX, eventY;
+    int state = STATES_NO;
 
     public LockView(Context context) {
         this(context, null);
@@ -72,6 +78,7 @@ public class LockView extends View {
         viewWidth = w;
         viewHeight = h;
         radius = viewWidth / 10;
+        init();
     }
 
     private void init() {
@@ -85,11 +92,13 @@ public class LockView extends View {
         mLinePaint.setColor(selectedColor);
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setStrokeWidth(radius / 3 * 2);
+        mLinePaint.setStrokeJoin(Paint.Join.ROUND);
 //        screenWidth = ScreenUtils.getScreenWidth();
 //        screenHeight = ScreenUtils.getScreenHeight();
         int viewWidth = SizeUtils.dp2px(radius) * 9;//图案的宽度
         int viewHeight = viewWidth;//图案的高度
         int sumX = 0;
+        int index = 0;
         for (int i = 0; i < 3; i++) {
             int sumY = 0;
             if (i == 0) {
@@ -106,7 +115,8 @@ public class LockView extends View {
                     sumY += radius * 3;
 
                 }
-                points[i][j] = new Point(sumX, sumY);
+                points[index] = new CusPoint(sumX, sumY);
+                index++;
             }
 //            circelX[i] = sumX;
 //            circelY[i] = sumY;
@@ -117,95 +127,175 @@ public class LockView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        init();
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                canvas.drawCircle(points[i][j].x, points[i][j].y, radius, mSourcePaint);
-                canvas.drawCircle(points[i][j].x, points[i][j].y, radius / 3, mSourcePaint);
-            }
+        if (state == STATES_ERROR) {
+            mSourcePaint.setColor(Color.parseColor("#f06292"));
+        } else if (state == STATES_NO) {
+            mSourcePaint.setColor(Color.BLACK);
         }
 
-        Point prePoint = null;
+        boolean isMoved = false;
         Path path = new Path();
-
-        //解锁图案
-        for (Point selectedPoint : selectedPoints) {
-            canvas.drawCircle(selectedPoint.x, selectedPoint.y, radius, mSelectedPaint);
-            if (prePoint != null) {
-
+        for (CusPoint point : points) {
+            if (point.state == CusPoint.STATE_UNSELECTED) {
+                canvas.drawCircle(point.x, point.y, radius / 3, mSourcePaint);
+                canvas.drawCircle(point.x, point.y, radius, mSourcePaint);
+            } else {
+                canvas.drawCircle(point.x, point.y, radius, mSelectedPaint);
             }
-            path.moveTo();
-            prePoint = selectedPoint;
         }
 
-        canvas.save();
-        canvas.translate(prePoint.x, prePoint.y);
+        int lastIndex = 0;
+        for (Integer selectedIndex : selectedIndexs) {
+            if (!isMoved) {
+                path.moveTo(points[selectedIndex].x, points[selectedIndex].y);
+                isMoved = true;
+            } else {
+                path.lineTo(points[selectedIndex].x, points[selectedIndex].y);
+            }
+            lastIndex = selectedIndex;
+        }
+//
+//
+//        //解锁图案
+//        for (CusPoint selectedPoint : selectedPoints) {
+//            canvas.drawCircle(selectedPoint.x, selectedPoint.y, radius, mSelectedPaint);
+//            canvas.drawCircle(selectedPoint.x, selectedPoint.y, radius / 3, mSelectedPaint);
+//
+//        }
+//
+        if (points[lastIndex] != null
+                && getDistance(new CusPoint((int) eventX, (int) eventY), points[lastIndex]) > radius
+                && state == STATES_ACTIONMOVE) {
+            path.lineTo(eventX, eventY);
+        }
 
-        path.lineTo(selectedPoint.x, selectedPoint.y);
+//        canvas.translate(prePoint.x, prePoint.y);
+
+//        path.lineTo(selectedPoint.x, selectedPoint.y);
+        canvas.save();
         canvas.drawPath(path, mLinePaint);
         canvas.restore();
+
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                Point selectPoint = getSelectPoint(event);
+                eventX = event.getX();
+                eventY = event.getY();
+                state = STATES_ACTIONDOWN;
+                reset();
+                selectedIndexs.clear();
+                CusPoint selectPoint = getSelectPoint(event);
                 if (selectPoint != null) {
-                    selectedPoints.add(selectPoint);
                     isDrawing = true;
                     postInvalidate();
                 }
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                if (isDrawing) {
-                    Point selectPoint1 = getSelectPoint(event);
-                    if (selectPoint1 != null
-                            && !selectedPoints.contains(selectPoint1)) {
-                        selectedPoints.add(selectPoint1);
-                        postInvalidate();
-                    }
+                eventX = event.getX();
+                eventY = event.getY();
+                state = STATES_ACTIONMOVE;
+//                if (isDrawing) {
+                CusPoint selectPoint1 = getSelectPoint(event);
+
+                postInvalidate();
+                //解锁成功
+                if (isCompleted()
+                        && onLockListener != null) {
+                    state = STATES_SUCCEED;
+                    onLockListener.onSucceed();
                 }
+//                }
                 break;
             case MotionEvent.ACTION_UP:
+                //解锁成功
+                if (!isCompleted()
+                        && onLockListener != null) {
+                    state = STATES_ERROR;
+                    onLockListener.onError();
+                }
+                postInvalidate();
+                state = STATES_ACTIONUP;
                 removeCallbacks(actionUpRunnable);
-                postDelayed(actionUpRunnable, 100);
+                postDelayed(actionUpRunnable, 500);
                 break;
 
         }
         return true;
     }
 
-    public Point getSelectPoint(MotionEvent event) {
-        int eventX = (int) event.getX();
-        int eventY = (int) event.getY();
-        int selectedIndex = 0;
-        for (Point[] point1 : points) {
-            for (Point point2 : point1) {
-                float distance = (float) Math.sqrt(Math.pow(point2.x - eventX, 2)
-                        + Math.pow(point2.y - eventY, 2));
-                if (distance <= radius) {
-                    LogUtils.d("distance:", distance);
-                    selectedIndexs.add(selectedIndex);
-                    return point2;
+    public CusPoint getSelectPoint(MotionEvent event) {
+        for (int i = 0; i < points.length; i++) {
+            float distance = getDistance(points[i]
+                    , new CusPoint((int) event.getX()
+                            , (int) event.getY()));
+            if (distance <= radius) {
+                LogUtils.d("distance:", distance);
+                if(!selectedIndexs.contains(i)){
+                    selectedIndexs.add(i);
                 }
-                selectedIndex++;
+                points[i].state = CusPoint.STATE_SELECTED;
+                return points[i];
             }
         }
 
         return null;
     }
 
+    /**
+     * 获得图案解锁结果
+     *
+     * @return
+     */
+    private String getResults() {
+        StringBuffer results = new StringBuffer();
+        for (Integer selectedIndex : selectedIndexs) {
+            results.append(selectedIndex);
+        }
+        return results.toString();
+    }
+
+    private boolean isCompleted() {
+        String results = getResults();
+        if (StringUtils.isEmpty(results)) {
+            return false;
+        }
+        if (results.equals(SPUtils.getInstance(CstUtils.TABLENAME)
+                .getString(CstUtils.KEY_PASSWORD))) {
+            return true;
+        }
+        return false;
+    }
+
+    private float getDistance(CusPoint point1, CusPoint point2) {
+        return (float) Math.sqrt(Math.pow(point2.x - point1.x, 2)
+                + Math.pow(point2.y - point1.y, 2));
+    }
+
     public Runnable actionUpRunnable = new Runnable() {
         @Override
         public void run() {
-            if (selectedPoints != null) {
-                selectedPoints.clear();
-                selectedIndexs.clear();
-                postInvalidate();
-            }
+            reset();
+            selectedIndexs.clear();
+            state = STATES_NO;
+            postInvalidate();
         }
     };
+
+    private void reset() {
+        for (CusPoint point : points) {
+            point.state = CusPoint.STATE_UNSELECTED;
+        }
+    }
+
+    public interface OnLockListener {
+
+        void onSucceed();
+
+        void onError();
+    }
 
 }
