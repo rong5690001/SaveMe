@@ -47,6 +47,7 @@ public class LockView extends View {
 
     float eventX, eventY;
     int state = STATES_NO;
+    boolean isSetPsd = false;//是否是设置密码
 
     public LockView(Context context) {
         this(context, null);
@@ -87,11 +88,12 @@ public class LockView extends View {
         mSourcePaint.setStrokeWidth(strokeWidth);
         mSelectedPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mSelectedPaint.setColor(selectedColor);
-        mSelectedPaint.setStyle(Paint.Style.FILL);
+        mSelectedPaint.setStyle(Paint.Style.STROKE);
+        mSelectedPaint.setStrokeWidth(strokeWidth);
         mLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mLinePaint.setColor(selectedColor);
         mLinePaint.setStyle(Paint.Style.STROKE);
-        mLinePaint.setStrokeWidth(radius / 3 * 2);
+        mLinePaint.setStrokeWidth(radius / 10);
         mLinePaint.setStrokeJoin(Paint.Join.ROUND);
 //        screenWidth = ScreenUtils.getScreenWidth();
 //        screenHeight = ScreenUtils.getScreenHeight();
@@ -137,10 +139,13 @@ public class LockView extends View {
         Path path = new Path();
         for (CusPoint point : points) {
             if (point.state == CusPoint.STATE_UNSELECTED) {
-                canvas.drawCircle(point.x, point.y, radius / 3, mSourcePaint);
+                canvas.drawCircle(point.x, point.y, radius / 10, mSourcePaint);
                 canvas.drawCircle(point.x, point.y, radius, mSourcePaint);
             } else {
+                mSelectedPaint.setStyle(Paint.Style.STROKE);
                 canvas.drawCircle(point.x, point.y, radius, mSelectedPaint);
+                mSelectedPaint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(point.x, point.y, radius / 10, mSelectedPaint);
             }
         }
 
@@ -203,19 +208,24 @@ public class LockView extends View {
 
                 postInvalidate();
                 //解锁成功
-                if (isCompleted()
+                if (!isSetPsd
+                        && isCompleted()
                         && onLockListener != null) {
                     state = STATES_SUCCEED;
-                    onLockListener.onSucceed();
+                    onLockListener.onSucceed(getResults());
                 }
 //                }
                 break;
             case MotionEvent.ACTION_UP:
                 //解锁成功
-                if (!isCompleted()
-                        && onLockListener != null) {
-                    state = STATES_ERROR;
-                    onLockListener.onError();
+                if (onLockListener != null) {
+                    if(isCompleted()){
+                        state = STATES_SUCCEED;
+                        onLockListener.onSucceed(getResults());
+                    } else {
+                        state = STATES_ERROR;
+                        onLockListener.onError();
+                    }
                 }
                 postInvalidate();
                 state = STATES_ACTIONUP;
@@ -234,7 +244,7 @@ public class LockView extends View {
                             , (int) event.getY()));
             if (distance <= radius) {
                 LogUtils.d("distance:", distance);
-                if(!selectedIndexs.contains(i)){
+                if (!selectedIndexs.contains(i)) {
                     selectedIndexs.add(i);
                 }
                 points[i].state = CusPoint.STATE_SELECTED;
@@ -243,6 +253,14 @@ public class LockView extends View {
         }
 
         return null;
+    }
+
+    public void setOnLockListener(OnLockListener onLockListener) {
+        this.onLockListener = onLockListener;
+    }
+
+    public void setSetPsd(boolean setPsd) {
+        isSetPsd = setPsd;
     }
 
     /**
@@ -263,10 +281,16 @@ public class LockView extends View {
         if (StringUtils.isEmpty(results)) {
             return false;
         }
-        if (results.equals(SPUtils.getInstance(CstUtils.TABLENAME)
-                .getString(CstUtils.KEY_PASSWORD))) {
-            return true;
+
+        if (isSetPsd) {//设置密码
+            return selectedIndexs.size() > 3;
+        } else {
+            if (results.equals(SPUtils.getInstance(CstUtils.TABLENAME)
+                    .getString(CstUtils.KEY_PASSWORD))) {
+                return true;
+            }
         }
+
         return false;
     }
 
@@ -293,7 +317,7 @@ public class LockView extends View {
 
     public interface OnLockListener {
 
-        void onSucceed();
+        void onSucceed(String result);
 
         void onError();
     }
