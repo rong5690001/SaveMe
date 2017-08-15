@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rong.map.saveme.manager.SharePreferencesManager;
+import com.rong.map.saveme.service.LockService;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         initView();
         initSMS();
+        startService(new Intent(this, LockService.class));
     }
 
     private void initView() {
