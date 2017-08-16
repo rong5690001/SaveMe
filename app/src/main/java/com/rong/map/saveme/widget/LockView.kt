@@ -182,13 +182,13 @@ class LockView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 val selectPoint1 = getSelectPoint(event)
 
                 postInvalidate()
-                //解锁成功
-                if (!isSetPsd
-                        && isCompleted
-                        && onLockListener != null) {
-                    state = STATES_SUCCEED
-                    onLockListener!!.onSucceed(results)
-                }
+//                //解锁成功
+//                if (!isSetPsd
+//                        && isCompleted
+//                        && onLockListener != null) {
+//                    state = STATES_SUCCEED
+//                    onLockListener!!.onSucceed(results)
+//                }
             }
             MotionEvent.ACTION_UP -> {
                 //解锁成功
