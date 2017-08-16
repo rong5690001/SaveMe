@@ -26,8 +26,10 @@
         <service android:name=".service.LockService" />
 
         <activity android:name=".base.BaseActivity" />
-        <activity android:name=".activity.LockActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar"/>
+        <activity
+            android:name=".activity.LockActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".activity.SettingsActivity"></activity>
     </application>
 
 </manifest>

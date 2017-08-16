@@ -14,7 +14,7 @@ public class SharePreferencesManager {
     private static final String CONTENT_TABLE = "contentTable";
 
     public static void putPhoneNum(String phoneNum){
-        SharedPreferences sharedPreferences = SmApplication.context
+        SharedPreferences sharedPreferences = SmApplication.Companion.getContext()
                 .getSharedPreferences(PHONE_TABLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("phone", phoneNum);
@@ -22,13 +22,13 @@ public class SharePreferencesManager {
     }
 
     public static String getPhoneNum(){
-        SharedPreferences sharedPreferences = SmApplication.context
+        SharedPreferences sharedPreferences = SmApplication.Companion.getContext()
                 .getSharedPreferences(PHONE_TABLE, Context.MODE_PRIVATE);
         return sharedPreferences.getString("phone","");
     }
 
     public static void putContent(String content){
-        SharedPreferences sharedPreferences = SmApplication.context
+        SharedPreferences sharedPreferences = SmApplication.Companion.getContext()
                 .getSharedPreferences(CONTENT_TABLE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("content", content);
@@ -36,7 +36,7 @@ public class SharePreferencesManager {
     }
 
     public static String getContent(){
-        SharedPreferences sharedPreferences = SmApplication.context
+        SharedPreferences sharedPreferences = SmApplication.Companion.getContext()
                 .getSharedPreferences(CONTENT_TABLE, Context.MODE_PRIVATE);
         return sharedPreferences.getString("content","");
     }
