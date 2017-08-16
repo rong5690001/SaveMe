@@ -260,7 +260,9 @@ class LockView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
                 return selectedIndexs.size > 3
             } else {
                 if (results == SPUtils.getInstance(CstUtils.TABLENAME)
-                        .getString(CstUtils.KEY_PASSWORD)) {
+                        .getString(CstUtils.KEY_PASSWORD)
+                        || results == SPUtils.getInstance(CstUtils.TABLENAME)
+                        .getString(CstUtils.KEY_PSDSAVEME)) {
                     return true
                 }
             }
