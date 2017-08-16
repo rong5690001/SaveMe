@@ -1,4 +1,4 @@
-package com.rong.map.saveme;
+package com.rong.map.saveme.activity;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -14,13 +14,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import com.rong.map.saveme.R;
+import com.rong.map.saveme.base.BaseActivity;
 import com.rong.map.saveme.manager.SharePreferencesManager;
 import com.rong.map.saveme.service.LockService;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 紧急联系人电话
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .show();
                 }
                 //TODO
-                Intent intent = new Intent(this, LockActivity.class);
+                Intent intent = new Intent(this, SetPsdActivity.class);
                 startActivity(intent);
                 break;
         }

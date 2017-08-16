@@ -1,4 +1,4 @@
-package com.rong.map.saveme;
+package com.rong.map.saveme.base;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,4 +13,5 @@ public class BaseActivity extends AppCompatActivity {
     protected String getStringRes(int resId){
         return getResources().getString(resId);
     }
+
 }

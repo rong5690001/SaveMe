@@ -11,7 +11,8 @@ import android.support.annotation.Nullable;
 import android.view.WindowManager;
 
 import com.blankj.utilcode.util.LogUtils;
-import com.rong.map.saveme.LockActivity;
+import com.rong.map.saveme.activity.LockActivity;
+import com.rong.map.saveme.activity.SetPsdActivity;
 
 /**
  * 作者：陈华榕
