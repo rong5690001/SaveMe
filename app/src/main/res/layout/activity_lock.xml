@@ -8,7 +8,7 @@
     tools:context="com.rong.map.saveme.activity.SetPsdActivity">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/mTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -16,7 +16,7 @@
         android:text="@string/setyourpassword"/>
 
     <com.rong.map.saveme.widget.LockView
-        android:id="@+id/lockView"
+        android:id="@+id/mLockView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

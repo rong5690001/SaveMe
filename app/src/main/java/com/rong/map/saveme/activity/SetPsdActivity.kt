@@ -3,12 +3,12 @@ package com.rong.map.saveme.activity
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import android.widget.TextView
 import com.blankj.utilcode.util.SPUtils
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.R
 import com.rong.map.saveme.utils.CstUtils
 import com.rong.map.saveme.widget.LockView
+import kotlinx.android.synthetic.main.activity_lock.*
 
 class SetPsdActivity : BaseActivity() {
 
@@ -16,8 +16,6 @@ class SetPsdActivity : BaseActivity() {
         val KEY_TYPE = "key.type"
     }
 
-    internal var mTitle: TextView? = null
-    internal var mLockView: LockView? = null
     internal var confirm = 2
     internal var mResults = ""
     internal var isSaveMe = false
@@ -25,8 +23,8 @@ class SetPsdActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
-        title = if(isSaveMe) getString(R.string.savemeTitle) else getString(R.string.lockTitle)
         isSaveMe = intent.getBooleanExtra(KEY_TYPE, false)
+        title = if(isSaveMe) getString(R.string.savemeTitle) else getString(R.string.lockTitle)
         initView()
 
         //        startService(intent);
@@ -44,7 +42,7 @@ class SetPsdActivity : BaseActivity() {
     /**
      * 初始化view
      */
-    fun initView() {
+    private fun initView() {
         mLockView!!.setSetPsd(true)
         mLockView!!.setOnLockListener(object : LockView.OnLockListener {
             override fun onSucceed(results: String) {

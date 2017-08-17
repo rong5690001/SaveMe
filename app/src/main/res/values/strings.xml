@@ -7,4 +7,8 @@
     <string name="lckViewErrorMs">请至少设置四个点</string>
     <string name="savemeTitle">设置saveMe密码</string>
     <string name="lockTitle">设置解锁密码</string>
+    <string name="inputTip">请输入完整内容</string>
+    <string name="saved">已保存</string>
+    <string name="setPatternPsd">设置解锁图案密码</string>
+    <string name="setSmPatternPsd">设置saveme图案密码</string>
 </resources>

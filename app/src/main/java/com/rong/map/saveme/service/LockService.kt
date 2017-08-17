@@ -67,7 +67,7 @@ class LockService : Service() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onMessageEvent(event: SendMsgEvent) {/* Do something */
+    fun onMessageEvent(event: SendMsgEvent) {
         sendSMS(SPManager.msgData!!)
     };
 
@@ -82,9 +82,9 @@ class LockService : Service() {
             override fun onReceive(_context: Context, _intent: Intent) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        Toast.makeText(SmApplication.context,
-                                "短信发送成功", Toast.LENGTH_SHORT)
-                                .show()
+//                        Toast.makeText(SmApplication.context,
+//                                "短信发送成功", Toast.LENGTH_SHORT)
+//                                .show()
                     }
                     SmsManager.RESULT_ERROR_GENERIC_FAILURE -> {
                     }
@@ -104,9 +104,9 @@ class LockService : Service() {
                 deliverIntent, 0)
         this.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(_context: Context, _intent: Intent) {
-                Toast.makeText(SmApplication.context,
-                        "收信人已经成功接收", Toast.LENGTH_SHORT)
-                        .show()
+//                Toast.makeText(SmApplication.context,
+//                        "收信人已经成功接收", Toast.LENGTH_SHORT)
+//                        .show()
             }
         }, IntentFilter(DELIVERED_SMS_ACTION))
     }
@@ -149,7 +149,6 @@ class LockService : Service() {
     }
 
     companion object {
-
         private val TAG = "LockService"
     }
 }

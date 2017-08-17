@@ -34,7 +34,6 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
 
                 R.id.setMsg -> {
                     var intent = Intent(this, SetMsgActivity::class.java)
-                    intent.putExtra(SetPsdActivity.KEY_TYPE, true)
                     startActivity(intent)
                 }
 

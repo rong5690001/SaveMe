@@ -17,8 +17,10 @@ import android.widget.EditText
 import android.widget.Toast
 import com.blankj.utilcode.util.RegexUtils
 import com.blankj.utilcode.util.SPUtils
+import com.blankj.utilcode.util.ToastUtils
 import com.google.gson.Gson
 import com.rong.map.saveme.R
+import com.rong.map.saveme.SmApplication
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.manager.SPManager
 import com.rong.map.saveme.model.MsgData
@@ -61,13 +63,14 @@ class SetMsgActivity : BaseActivity(), View.OnClickListener {
         content!!.setText(msgData.msg)
         content!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                msgData.msg = p0.toString();
+
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun afterTextChanged(p0: Editable?) {
+                msgData.msg = p0.toString();
             }
 
         })
@@ -83,14 +86,11 @@ class SetMsgActivity : BaseActivity(), View.OnClickListener {
                     SPUtils.getInstance(CstUtils.TABLE_MSG)
                             .put(CstUtils.KEY_MSG
                                     , Gson().toJson(msgData))
+                    ToastUtils.showShort(getString(R.string.saved))
+                    finish()
                 } else {
-                    Toast.makeText(this@SetMsgActivity,
-                            "请输入完成内容", Toast.LENGTH_SHORT)
-                            .show()
+                    ToastUtils.showShort(getString(R.string.inputTip))
                 }
-                //TODO
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
             }
         }
     }
