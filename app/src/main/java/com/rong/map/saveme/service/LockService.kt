@@ -3,18 +3,15 @@ package com.rong.map.saveme.service
 import android.app.Activity
 import android.app.KeyguardManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.telephony.SmsManager
-import android.widget.Toast
 import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.SPUtils
-import com.rong.map.saveme.SmApplication
 import com.rong.map.saveme.activity.LockActivity
+import com.rong.map.saveme.base.BaseService
 import com.rong.map.saveme.event.SendMsgEvent
 import com.rong.map.saveme.manager.SPManager
 import com.rong.map.saveme.model.MsgData
@@ -29,7 +26,7 @@ import org.greenrobot.eventbus.ThreadMode
  * 时间：2017/8/9  18:24
  */
 
-class LockService : Service() {
+class LockService : BaseService() {
 
     private var lockIntent: Intent? = null
     private var mKeyguardManager: KeyguardManager? = null
@@ -42,6 +39,7 @@ class LockService : Service() {
         EventBus.getDefault().register(this@LockService)
         lockIntent = Intent(this, LockActivity::class.java)
         lockIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        lockIntent!!.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
 
         /* 注册广播 */
         val mScreenOnFilter = IntentFilter(Intent.ACTION_SCREEN_ON)

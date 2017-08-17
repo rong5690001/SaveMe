@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".SmApplication"
@@ -15,6 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".activity.SetMsgActivity"
             android:screenOrientation="portrait" />
@@ -22,7 +25,8 @@
             android:name=".activity.SetPsdActivity"
             android:screenOrientation="portrait" />
 
-        <service android:name=".service.LockService" />
+        <service
+            android:name=".service.LockService"/>
 
         <activity
             android:name=".base.BaseActivity"
@@ -48,12 +52,26 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activity.LockScreenActivity"
+            android:screenOrientation="portrait"></activity>
+
         <receiver
             android:name=".BroadcastReceiver.AutoLanuchReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".service.LockscreenService"></service>
+
+        <receiver
+            android:name=".BroadcastReceiver.LockscreenIntentReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>

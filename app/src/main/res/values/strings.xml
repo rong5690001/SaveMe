@@ -11,4 +11,8 @@
     <string name="saved">已保存</string>
     <string name="setPatternPsd">设置解锁图案密码</string>
     <string name="setSmPatternPsd">设置saveme图案密码</string>
+
+
+    <string name="instructions">Click on UNLOCK button to unlock the screen</string>
+    <string name="unlock">UNLOCK</string>
 </resources>

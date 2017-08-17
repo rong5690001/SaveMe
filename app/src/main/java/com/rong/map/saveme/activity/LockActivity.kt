@@ -9,6 +9,7 @@ import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.event.SendMsgEvent
 import com.rong.map.saveme.utils.CstUtils
+import com.rong.map.saveme.utils.LockscreenUtils
 import com.rong.map.saveme.widget.LockView
 import org.greenrobot.eventbus.EventBus
 
@@ -21,8 +22,13 @@ class LockActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        window.setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG)
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_lock2)
-        createView()
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
+        setContentView(R.layout.activity_lock2)
+        LockscreenUtils().lock(this)
+//        createView()
 
     }
 
