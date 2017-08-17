@@ -11,13 +11,14 @@ import com.rong.map.saveme.event.SendMsgEvent
 import com.rong.map.saveme.utils.CstUtils
 import com.rong.map.saveme.utils.LockscreenUtils
 import com.rong.map.saveme.widget.LockView
+import kotlinx.android.synthetic.main.activity_lock2.*
 import org.greenrobot.eventbus.EventBus
 
-class LockActivity : BaseActivity() {
+class LockActivity : BaseActivity(), LockscreenUtils.OnLockStatusChangedListener{
 
     internal lateinit var windowManager: WindowManager
     internal lateinit var contentLayout: LinearLayout
-    internal lateinit var lockView: LockView
+//    internal var mLockscreenUtils = LockscreenUtils()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        window.setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG)
@@ -27,9 +28,31 @@ class LockActivity : BaseActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD)
         setContentView(R.layout.activity_lock2)
-        LockscreenUtils().lock(this)
-//        createView()
+//        mLockscreenUtils.lock(this)
+//        initView()
+        createView()
 
+    }
+
+    private fun initView(){
+        lockView.setOnLockListener(object : LockView.OnLockListener {
+
+            override fun onSucceed(result: String) {
+                if (result == SPUtils.getInstance(CstUtils.TABLENAME)
+                        .getString(CstUtils.KEY_PASSWORD)) {
+                    windowManager.removeView(contentLayout)
+//                    mLockscreenUtils.unlock()
+                } else if (result == SPUtils.getInstance(CstUtils.TABLENAME)
+                        .getString(CstUtils.KEY_PSDSAVEME)) {
+                    EventBus.getDefault().post(SendMsgEvent())
+                }
+            }
+
+            override fun onError() {
+
+            }
+
+        })
     }
 
 //    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -44,6 +67,13 @@ class LockActivity : BaseActivity() {
 ////        window.setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG)
 //        super.onAttachedToWindow()
 //    }
+
+    override fun onLockStatusChanged(isLocked: Boolean) {
+        if(!isLocked){
+            finish()
+        }
+    }
+
 
     @SuppressLint("WrongConstant")
     fun createView() {
@@ -66,7 +96,7 @@ class LockActivity : BaseActivity() {
         val contentView = inflater.inflate(R.layout.activity_lock2, null)
 
         contentLayout = contentView.findViewById<View>(R.id.contentLayout) as LinearLayout
-        lockView = contentView.findViewById<View>(R.id.lockView) as LockView
+        var lockView = contentView.findViewById<View>(R.id.lockView) as LockView
         windowManager.addView(contentLayout, windowParams)
 //        contentLayout.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
 //
@@ -81,6 +111,7 @@ class LockActivity : BaseActivity() {
                 if (result == SPUtils.getInstance(CstUtils.TABLENAME)
                         .getString(CstUtils.KEY_PASSWORD)) {
                     windowManager.removeView(contentLayout)
+//                    mLockscreenUtils.unlock()
                     finish()
                 } else if (result == SPUtils.getInstance(CstUtils.TABLENAME)
                         .getString(CstUtils.KEY_PSDSAVEME)) {

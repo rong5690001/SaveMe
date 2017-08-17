@@ -136,6 +136,9 @@ class LockService : BaseService() {
     // 屏幕变暗/变亮的广播 ， 我们要调用KeyguardManager类相应方法去解除屏幕锁定
     private val mScreenOffReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            if (SPManager.msgData == null){
+                return
+            }
             val action = intent.action
             if (action == Intent.ACTION_SCREEN_OFF || action == Intent.ACTION_SCREEN_ON) {
                 mKeyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager

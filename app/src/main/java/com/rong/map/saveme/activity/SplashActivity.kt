@@ -6,6 +6,7 @@ import android.os.Handler
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.service.LockService
+import com.rong.map.saveme.service.LockscreenService
 
 class SplashActivity : BaseActivity() {
 
@@ -14,8 +15,10 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
         startService(Intent(this, LockService::class.java))
         Handler().postDelayed({
-            startActivity(Intent(this@SplashActivity
-                    , SettingsActivity::class.java))
+            var intent = Intent(this@SplashActivity
+                    , SettingsActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            startActivity(intent)
             finish()
         }, 2000)
     }
