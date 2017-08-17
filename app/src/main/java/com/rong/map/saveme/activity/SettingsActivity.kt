@@ -6,18 +6,15 @@ import android.view.View
 import android.widget.TextView
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : BaseActivity(), View.OnClickListener {
-    internal var setLockPattern: TextView? = null
-
-    internal var setSaveMePattern: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        setLockPattern = findViewById(R.id.setLockPattern)
         setLockPattern!!.setOnClickListener(this)
-        setSaveMePattern = findViewById(R.id.setSaveMePattern)
         setSaveMePattern!!.setOnClickListener(this)
+        setMsg!!.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -35,6 +32,11 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
                     startActivity(intent)
                 }
 
+                R.id.setMsg -> {
+                    var intent = Intent(this, SetMsgActivity::class.java)
+                    intent.putExtra(SetPsdActivity.KEY_TYPE, true)
+                    startActivity(intent)
+                }
 
             }
         }

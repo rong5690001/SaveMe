@@ -25,6 +25,7 @@ class SetPsdActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_lock)
+        title = if(isSaveMe) getString(R.string.savemeTitle) else getString(R.string.lockTitle)
         isSaveMe = intent.getBooleanExtra(KEY_TYPE, false)
         initView()
 
@@ -44,8 +45,6 @@ class SetPsdActivity : BaseActivity() {
      * 初始化view
      */
     fun initView() {
-        mTitle = findViewById(R.id.title);
-        mLockView = findViewById(R.id.lockView);
         mLockView!!.setSetPsd(true)
         mLockView!!.setOnLockListener(object : LockView.OnLockListener {
             override fun onSucceed(results: String) {

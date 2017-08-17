@@ -7,10 +7,10 @@ import android.widget.LinearLayout
 import com.blankj.utilcode.util.SPUtils
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
+import com.rong.map.saveme.event.SendMsgEvent
 import com.rong.map.saveme.utils.CstUtils
 import com.rong.map.saveme.widget.LockView
-import kotlinx.android.synthetic.main.activity_lock.*
-import kotlinx.android.synthetic.main.activity_main.*
+import org.greenrobot.eventbus.EventBus
 
 class LockActivity : BaseActivity() {
 
@@ -76,6 +76,9 @@ class LockActivity : BaseActivity() {
                         .getString(CstUtils.KEY_PASSWORD)) {
                     windowManager.removeView(contentLayout)
                     finish()
+                } else if (result == SPUtils.getInstance(CstUtils.TABLENAME)
+                        .getString(CstUtils.KEY_PSDSAVEME)) {
+                    EventBus.getDefault().post(SendMsgEvent())
                 }
             }
 

@@ -7,34 +7,34 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.telephony.SmsManager
+import android.text.Editable
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.blankj.utilcode.util.RegexUtils
+import com.blankj.utilcode.util.SPUtils
+import com.google.gson.Gson
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
-import com.rong.map.saveme.manager.SharePreferencesManager
+import com.rong.map.saveme.manager.SPManager
+import com.rong.map.saveme.model.MsgData
 import com.rong.map.saveme.service.LockService
+import com.rong.map.saveme.utils.CstUtils
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity(), View.OnClickListener {
+class SetMsgActivity : BaseActivity(), View.OnClickListener {
 
-    /**
-     * 紧急联系人电话
-     */
-    private var mPhone: EditText? = null
-    /**
-     * 短信内容
-     */
-    private var mContent: EditText? = null
     /**
      * 保存
      */
     private var mSaveBtn: Button? = null
     private var sentPI: PendingIntent? = null
     private var deliverPI: PendingIntent? = null
+    private var msgData: MsgData = SPManager.msgData ?: MsgData("", "")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +45,32 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun initView() {
-        mPhone = findViewById<View>(R.id.phone) as EditText
-        mPhone!!.setText(SharePreferencesManager.getPhoneNum())
-        mContent = findViewById<View>(R.id.content) as EditText
-        mContent!!.setText(SharePreferencesManager.getContent())
+        phone!!.setText(msgData.phoneNum)
+        phone!!.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+                msgData.phoneNum = p0.toString();
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
+        content!!.setText(msgData.msg)
+        content!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                msgData.msg = p0.toString();
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
         mSaveBtn = findViewById<View>(R.id.saveBtn) as Button
         mSaveBtn!!.setOnClickListener(this)
     }
@@ -57,9 +79,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.saveBtn -> {
                 if (canSave()) {
-                    sendSMS(mPhone!!.text.toString(), mContent!!.text.toString())
+                    sendSMS(phone!!.text.toString(), content!!.text.toString())
+                    SPUtils.getInstance(CstUtils.TABLE_MSG)
+                            .put(CstUtils.KEY_MSG
+                                    , Gson().toJson(msgData))
                 } else {
-                    Toast.makeText(this@MainActivity,
+                    Toast.makeText(this@SetMsgActivity,
                             "请输入完成内容", Toast.LENGTH_SHORT)
                             .show()
                 }
@@ -81,8 +106,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             override fun onReceive(_context: Context, _intent: Intent) {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        SharePreferencesManager.putPhoneNum(mPhone!!.text.toString())
-                        Toast.makeText(this@MainActivity,
+                        SPManager.putPhoneNum(phone!!.text.toString())
+                        Toast.makeText(this@SetMsgActivity,
                                 "短信发送成功", Toast.LENGTH_SHORT)
                                 .show()
                     }
@@ -104,7 +129,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
                 deliverIntent, 0)
         this.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(_context: Context, _intent: Intent) {
-                Toast.makeText(this@MainActivity,
+                Toast.makeText(this@SetMsgActivity,
                         "收信人已经成功接收", Toast.LENGTH_SHORT)
                         .show()
             }
@@ -118,7 +143,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
      * @param message
      */
     fun sendSMS(phoneNumber: String, message: String) {
-        SharePreferencesManager.putContent(mContent!!.text.toString())
+        SPManager.putContent(content!!.text.toString())
         //获取短信管理器
         val smsManager = android.telephony.SmsManager.getDefault()
         //拆分短信内容（手机短信长度限制）
@@ -129,7 +154,8 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun canSave(): Boolean {
-        if (TextUtils.isEmpty(mPhone!!.text.toString())) return false
-        return if (TextUtils.isEmpty(mContent!!.text.toString())) false else true
+        return !TextUtils.isEmpty(msgData.msg)
+                && !TextUtils.isEmpty(msgData.phoneNum)
+                && RegexUtils.isMobileExact(msgData.phoneNum)
     }
 }

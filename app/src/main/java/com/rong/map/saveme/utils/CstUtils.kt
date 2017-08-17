@@ -10,4 +10,7 @@ object CstUtils {
     val KEY_PASSWORD = "password"
     val KEY_PSDSAVEME = "saveme.psd"
 
+    val TABLE_MSG = "table.msg"
+    val KEY_MSG = "key.msg"
+
 }
