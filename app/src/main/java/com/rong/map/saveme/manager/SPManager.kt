@@ -1,11 +1,8 @@
 package com.rong.map.saveme.manager
 
-import android.content.Context
-import android.content.SharedPreferences
-
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.google.gson.Gson
-import com.rong.map.saveme.SmApplication
 import com.rong.map.saveme.model.MsgData
 import com.rong.map.saveme.utils.CstUtils
 
@@ -15,36 +12,25 @@ import com.rong.map.saveme.utils.CstUtils
 
 object SPManager {
 
-    private val PHONE_TABLE = "phoneTable"
-    private val CONTENT_TABLE = "contentTable"
-
-    fun putPhoneNum(phoneNum: String) {
-        val sharedPreferences = SmApplication.context
-                .getSharedPreferences(PHONE_TABLE, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("phone", phoneNum)
-        editor.apply()
-    }
-
+    /**
+     * 获取信息
+     */
     val msgData: MsgData?
         get() {
             val msg = SPUtils.getInstance(CstUtils.TABLE_MSG).getString(CstUtils.KEY_MSG)
             return Gson().fromJson(msg, MsgData::class.java)
         }
 
-    fun putContent(content: String) {
-        val sharedPreferences = SmApplication.context
-                .getSharedPreferences(CONTENT_TABLE, Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("content", content)
-        editor.apply()
-    }
-
-    val content: String
-        get() {
-            val sharedPreferences = SmApplication.context
-                    .getSharedPreferences(CONTENT_TABLE, Context.MODE_PRIVATE)
-            return sharedPreferences.getString("content", "")
+    /**
+     * 存储信息
+     */
+    fun putMsgData(msgData: MsgData) {
+        try {
+            SPUtils.getInstance(CstUtils.TABLE_MSG)
+                    .put(CstUtils.KEY_MSG, Gson().toJson(msgData))
+        } catch (e: Exception) {
+            LogUtils.e(e)
         }
+    }
 
 }

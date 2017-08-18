@@ -9,7 +9,7 @@
     tools:context="com.rong.map.saveme.activity.LockActivity">
 
     <com.rong.map.saveme.widget.LockView
-        android:id="@+id/lockView"
+        android:id="@+id/mLockView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

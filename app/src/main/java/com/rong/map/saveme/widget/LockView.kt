@@ -259,9 +259,9 @@ class LockView @JvmOverloads constructor(context: Context, attrs: AttributeSet? 
             if (isSetPsd) {
                 return selectedIndexs.size > 3
             } else {
-                if (results == SPUtils.getInstance(CstUtils.TABLENAME)
+                if (results == SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
                         .getString(CstUtils.KEY_PASSWORD)
-                        || results == SPUtils.getInstance(CstUtils.TABLENAME)
+                        || results == SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
                         .getString(CstUtils.KEY_PSDSAVEME)) {
                     return true
                 }

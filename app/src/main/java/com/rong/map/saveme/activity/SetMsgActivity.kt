@@ -42,8 +42,6 @@ class SetMsgActivity : BaseActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
-        initSMS()
-        startService(Intent(this, LockService::class.java))
     }
 
     private fun initView() {
@@ -82,74 +80,14 @@ class SetMsgActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.saveBtn -> {
                 if (canSave()) {
-                    sendSMS(phone!!.text.toString(), content!!.text.toString())
-                    SPUtils.getInstance(CstUtils.TABLE_MSG)
-                            .put(CstUtils.KEY_MSG
-                                    , Gson().toJson(msgData))
+//                    sendSMS()
+                    SPManager.putMsgData(msgData)
                     ToastUtils.showShort(getString(R.string.saved))
                     finish()
                 } else {
                     ToastUtils.showShort(getString(R.string.inputTip))
                 }
             }
-        }
-    }
-
-    private fun initSMS() {
-        //处理返回的发送状态
-        val SENT_SMS_ACTION = "SENT_SMS_ACTION"
-        val sentIntent = Intent(SENT_SMS_ACTION)
-        sentPI = PendingIntent.getBroadcast(this, 0, sentIntent,
-                0)
-        // register the Broadcast Receivers
-        this.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(_context: Context, _intent: Intent) {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        SPManager.putPhoneNum(phone!!.text.toString())
-                        Toast.makeText(this@SetMsgActivity,
-                                "短信发送成功", Toast.LENGTH_SHORT)
-                                .show()
-                    }
-                    SmsManager.RESULT_ERROR_GENERIC_FAILURE -> {
-                    }
-                    SmsManager.RESULT_ERROR_RADIO_OFF -> {
-                    }
-                    SmsManager.RESULT_ERROR_NULL_PDU -> {
-                    }
-                }
-            }
-        }, IntentFilter(SENT_SMS_ACTION))
-
-        //处理返回的接收状态
-        val DELIVERED_SMS_ACTION = "DELIVERED_SMS_ACTION"
-        // create the deilverIntent parameter
-        val deliverIntent = Intent(DELIVERED_SMS_ACTION)
-        deliverPI = PendingIntent.getBroadcast(this, 0,
-                deliverIntent, 0)
-        this.registerReceiver(object : BroadcastReceiver() {
-            override fun onReceive(_context: Context, _intent: Intent) {
-                Toast.makeText(this@SetMsgActivity,
-                        "收信人已经成功接收", Toast.LENGTH_SHORT)
-                        .show()
-            }
-        }, IntentFilter(DELIVERED_SMS_ACTION))
-    }
-
-    /**
-     * 直接调用短信接口发短信
-     *
-     * @param phoneNumber
-     * @param message
-     */
-    fun sendSMS(phoneNumber: String, message: String) {
-        SPManager.putContent(content!!.text.toString())
-        //获取短信管理器
-        val smsManager = android.telephony.SmsManager.getDefault()
-        //拆分短信内容（手机短信长度限制）
-        val divideContents = smsManager.divideMessage(message)
-        for (text in divideContents) {
-            smsManager.sendTextMessage(phoneNumber, null, text, sentPI, deliverPI)
         }
     }
 

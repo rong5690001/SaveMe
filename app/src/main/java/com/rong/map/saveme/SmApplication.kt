@@ -2,11 +2,9 @@ package com.rong.map.saveme
 
 import android.app.Application
 import android.content.Context
-import android.content.Intent
 import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.Utils
 import com.blankj.utilcode.util.LogUtils.Builder
-import com.rong.map.saveme.service.LockService
 
 /**
  * Created by Administrator on 2017/8/8/008.

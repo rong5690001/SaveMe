@@ -17,7 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".activity.SetMsgActivity"
             android:screenOrientation="portrait" />
@@ -25,8 +24,7 @@
             android:name=".activity.SetPsdActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name=".service.LockService"/>
+        <service android:name=".service.LockService" />
 
         <activity
             android:name=".base.BaseActivity"
@@ -38,11 +36,10 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.SplashActivity"
+            android:excludeFromRecents="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -51,10 +48,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.LockScreenActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".BroadcastReceiver.AutoLanuchReceiver"
@@ -65,7 +61,7 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.LockscreenService"></service>
+        <service android:name=".service.LockscreenService" />
 
         <receiver
             android:name=".BroadcastReceiver.LockscreenIntentReceiver"
@@ -74,6 +70,8 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.Lock2Activity"></activity>
     </application>
 
 </manifest>

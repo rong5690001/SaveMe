@@ -13,9 +13,4 @@ open class BaseActivity : AppCompatActivity() {
     protected fun getStringRes(resId: Int): String {
         return resources.getString(resId)
     }
-
-    override fun startActivity(intent: Intent) {
-        intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
-        super.startActivity(intent)
-    }
 }

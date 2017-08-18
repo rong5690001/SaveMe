@@ -6,7 +6,7 @@ package com.rong.map.saveme.utils
 
 object CstUtils {
 
-    val TABLENAME = "password"
+    val TABLE_PASSWORD = "password"
     val KEY_PASSWORD = "password"
     val KEY_PSDSAVEME = "saveme.psd"
 

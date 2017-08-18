@@ -56,7 +56,7 @@ class SetPsdActivity : BaseActivity() {
                     if (mResults.equals(results)) {
                         mTitle!!.setText(R.string.setpswscd)
                         var key = if (isSaveMe) CstUtils.KEY_PSDSAVEME else CstUtils.KEY_PASSWORD
-                        SPUtils.getInstance(CstUtils.TABLENAME).put(key, results)
+                        SPUtils.getInstance(CstUtils.TABLE_PASSWORD).put(key, results)
                         Handler().postDelayed({
                             finish()
                         }, 1000)
