@@ -36,7 +36,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".activity.SettingsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
             android:excludeFromRecents="true"
@@ -71,7 +71,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.Lock2Activity"></activity>
+        <activity android:name=".activity.Lock2Activity" />
+        <activity android:name=".activity.SaveMeActivity"></activity>
     </application>
 
 </manifest>

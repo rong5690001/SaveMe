@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import com.blankj.utilcode.util.SPUtils
-import com.blankj.utilcode.util.StringUtils
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
+import com.rong.map.saveme.manager.SPManager
 import com.rong.map.saveme.service.LockService
 import com.rong.map.saveme.utils.CstUtils
 
@@ -24,10 +24,15 @@ class SplashActivity : BaseActivity() {
                 .getString(CstUtils.KEY_PASSWORD);
         var smPsd = SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
                 .getString(CstUtils.KEY_PSDSAVEME);
-        if (!(StringUtils.isEmpty(psd)
-                && StringUtils.isEmpty(smPsd))) {//已经设置密码
+        var msgData = SPManager.msgData;
+//        if (!(StringUtils.isEmpty(psd)
+//                && StringUtils.isEmpty(smPsd))) {//已经设置密码
+//            mIntent.setClass(this@SplashActivity
+//                    , Lock2Activity::class.java)
+//        }
+        if (msgData != null) {
             mIntent.setClass(this@SplashActivity
-                    , Lock2Activity::class.java)
+                    , SaveMeActivity::class.java)
         }
         Handler().postDelayed({
             startActivity(mIntent)

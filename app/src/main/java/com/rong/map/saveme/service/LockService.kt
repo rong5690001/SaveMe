@@ -38,8 +38,6 @@ class LockService : BaseService() {
         super.onCreate()
         EventBus.getDefault().register(this@LockService)
         lockIntent = Intent(this, LockActivity::class.java)
-        lockIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        lockIntent!!.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
 
         /* 注册广播 */
         val mScreenOnFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
