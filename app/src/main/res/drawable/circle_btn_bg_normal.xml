@@ -7,14 +7,17 @@
         android:endColor="#F9C614"
         android:startColor="#F9C614"
         android:type="sweep" />
+
     <padding
         android:bottom="0dp"
         android:left="0dp"
         android:right="0dp"
         android:top="0dp" />
+
     <size
         android:width="270dp"
         android:height="270dp" />
+
     <stroke
         android:width="3dp"
         android:color="#878787" />

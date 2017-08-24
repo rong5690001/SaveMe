@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SaveMe</string>
+    <string name="app_name">SM</string>
     <string name="setyourpassword">设置您的图案锁</string>
     <string name="resetyourpassword">重新设置您的图案锁</string>
     <string name="confirmpassword">再次确认图案锁</string>

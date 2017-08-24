@@ -7,4 +7,7 @@
     <color name="yellow">#F5DC49</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="green_A400">#00e676</color>
+    <color name="green_A700">#00bfa5</color>
+    <color name="red_A700">#d50000</color>
 </resources>

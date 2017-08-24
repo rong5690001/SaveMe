@@ -13,6 +13,7 @@ import com.blankj.utilcode.util.LogUtils
 import com.rong.map.saveme.activity.LockActivity
 import com.rong.map.saveme.base.BaseService
 import com.rong.map.saveme.event.SendMsgEvent
+import com.rong.map.saveme.event.SendMsgResultEvent
 import com.rong.map.saveme.manager.SPManager
 import com.rong.map.saveme.model.MsgData
 import org.greenrobot.eventbus.EventBus
@@ -38,6 +39,7 @@ class LockService : BaseService() {
         super.onCreate()
         EventBus.getDefault().register(this@LockService)
         lockIntent = Intent(this, LockActivity::class.java)
+        lockIntent!!.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         /* 注册广播 */
         val mScreenOnFilter = IntentFilter(Intent.ACTION_SCREEN_ON)
@@ -81,12 +83,19 @@ class LockService : BaseService() {
 //                        Toast.makeText(SmApplication.context,
 //                                "短信发送成功", Toast.LENGTH_SHORT)
 //                                .show()
+
                     }
                     SmsManager.RESULT_ERROR_GENERIC_FAILURE -> {
+                        EventBus.getDefault().post(SendMsgResultEvent(false))
                     }
                     SmsManager.RESULT_ERROR_RADIO_OFF -> {
+                        EventBus.getDefault().post(SendMsgResultEvent(false))
                     }
                     SmsManager.RESULT_ERROR_NULL_PDU -> {
+                        EventBus.getDefault().post(SendMsgResultEvent(false))
+                    }
+                    SmsManager.RESULT_ERROR_NO_SERVICE -> {
+                        EventBus.getDefault().post(SendMsgResultEvent(false))
                     }
                 }
             }
@@ -103,6 +112,7 @@ class LockService : BaseService() {
 //                Toast.makeText(SmApplication.context,
 //                        "收信人已经成功接收", Toast.LENGTH_SHORT)
 //                        .show()
+                EventBus.getDefault().post(SendMsgResultEvent(true))
             }
         }, IntentFilter(DELIVERED_SMS_ACTION))
     }
