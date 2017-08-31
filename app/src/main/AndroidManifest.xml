@@ -39,7 +39,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashActivity"
-            android:excludeFromRecents="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
@@ -48,9 +47,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.LockScreenActivity"
-            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".BroadcastReceiver.AutoLanuchReceiver"
@@ -58,16 +54,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_OFF" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".service.LockscreenService" />
-
-        <receiver
-            android:name=".BroadcastReceiver.LockscreenIntentReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 

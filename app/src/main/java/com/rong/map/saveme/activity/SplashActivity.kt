@@ -17,14 +17,10 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        startService(Intent(this@SplashActivity, LockService::class.java))
+//        startService(Intent(this@SplashActivity, LockService::class.java))
         mIntent = Intent(this@SplashActivity
                 , SettingsActivity::class.java)
-        var psd = SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
-                .getString(CstUtils.KEY_PASSWORD);
-        var smPsd = SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
-                .getString(CstUtils.KEY_PSDSAVEME);
-        var msgData = SPManager.msgData;
+        var msgData = SPManager.msgData
 //        if (!(StringUtils.isEmpty(psd)
 //                && StringUtils.isEmpty(smPsd))) {//已经设置密码
 //            mIntent.setClass(this@SplashActivity
@@ -34,6 +30,7 @@ class SplashActivity : BaseActivity() {
             mIntent.setClass(this@SplashActivity
                     , SaveMeActivity::class.java)
         }
+
         Handler().postDelayed({
             startActivity(mIntent)
             finish()
