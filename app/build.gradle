@@ -17,31 +17,38 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.blankj:utilcode:1.8.1'
     //butterknife
-//    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+    //    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     //解析json
     compile 'com.google.code.gson:gson:2.5'
     compile 'org.greenrobot:eventbus:3.0.0'
-
     compile 'io.reactivex.rxjava2:rxkotlin:2.1.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-// Because RxAndroid releases are few and far between, it is recommended you also
-// explicitly depend on RxJava's latest version for bug fixes and new features.
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex.rxjava2:rxjava:2.1.2'
+//    implementation project(':mylibrary')
+
+//    compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.4@aar'
 }
 
 apply plugin: 'kotlin-android'
