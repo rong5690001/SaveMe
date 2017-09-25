@@ -1,8 +1,10 @@
 package com.rong.map.saveme.activity
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
+import com.blankj.utilcode.util.LogUtils
 import com.blankj.utilcode.util.SPUtils
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.R
@@ -26,8 +28,34 @@ class SetPsdActivity : BaseActivity() {
         isSaveMe = intent.getBooleanExtra(KEY_TYPE, false)
         title = if(isSaveMe) getString(R.string.savemeTitle) else getString(R.string.lockTitle)
         initView()
+        LogUtils.i("onCreate")
 
         //        startService(intent);
+    }
+
+    override fun onStart() {
+        super.onStart()
+        LogUtils.i("onStart")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        LogUtils.i("onNewIntent")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        LogUtils.i("onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        LogUtils.i("onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        LogUtils.i("onStop")
     }
 
     fun showTitleError() {

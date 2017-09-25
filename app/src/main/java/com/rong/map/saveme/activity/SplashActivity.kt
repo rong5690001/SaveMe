@@ -7,7 +7,6 @@ import com.blankj.utilcode.util.SPUtils
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.manager.SPManager
-import com.rong.map.saveme.service.LockService
 import com.rong.map.saveme.utils.CstUtils
 
 class SplashActivity : BaseActivity() {
@@ -21,6 +20,13 @@ class SplashActivity : BaseActivity() {
         mIntent = Intent(this@SplashActivity
                 , SettingsActivity::class.java)
         var msgData = SPManager.msgData
+
+        mIntent = Intent(this@SplashActivity
+                , SettingsActivity::class.java)
+        var psd = SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
+                .getString(CstUtils.KEY_PASSWORD);
+        var smPsd = SPUtils.getInstance(CstUtils.TABLE_PASSWORD)
+                .getString(CstUtils.KEY_PSDSAVEME);
 //        if (!(StringUtils.isEmpty(psd)
 //                && StringUtils.isEmpty(smPsd))) {//已经设置密码
 //            mIntent.setClass(this@SplashActivity
@@ -30,7 +36,6 @@ class SplashActivity : BaseActivity() {
             mIntent.setClass(this@SplashActivity
                     , SaveMeActivity::class.java)
         }
-
         Handler().postDelayed({
             startActivity(mIntent)
             finish()

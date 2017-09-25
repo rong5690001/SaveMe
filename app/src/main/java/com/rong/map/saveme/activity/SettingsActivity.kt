@@ -3,7 +3,6 @@ package com.rong.map.saveme.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -15,6 +14,18 @@ class SettingsActivity : BaseActivity(), View.OnClickListener {
         setLockPattern!!.setOnClickListener(this)
         setSaveMePattern!!.setOnClickListener(this)
         setMsg!!.setOnClickListener(this)
+
+//        Thread(Runnable {
+//            object : AsyncTask<String, Integer, String>() {
+//                override fun doInBackground(vararg p0: String?): String {
+//                    return "21"
+//                }
+//
+//
+//            }.execute()
+//        }).start()
+        //TODO Test
+
     }
 
     override fun onClick(p0: View?) {
