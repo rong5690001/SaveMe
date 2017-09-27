@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.telephony.SmsManager
 import com.blankj.utilcode.util.LogUtils
+import com.rong.map.saveme.SmApplication
 import com.rong.map.saveme.activity.LockActivity
 import com.rong.map.saveme.base.BaseService
 import com.rong.map.saveme.event.SendMsgEvent
@@ -66,7 +67,9 @@ class LockService : BaseService() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onMessageEvent(event: SendMsgEvent) {
-        sendSMS(SPManager.msgData!!)
+        var msgData = SPManager.msgData
+        msgData!!.msg = msgData.msg + "\n" + SmApplication.location
+        sendSMS(msgData)
     };
 
     private fun initSMS() {
@@ -149,7 +152,7 @@ class LockService : BaseService() {
                 mKeyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
                 mKeyguardLock = mKeyguardManager!!.newKeyguardLock("")
                 mKeyguardLock!!.disableKeyguard()
-                startActivity(lockIntent)
+//                startActivity(lockIntent)
             }
         }
     }

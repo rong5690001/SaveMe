@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.SPUtils
 import com.rong.map.saveme.R
 import com.rong.map.saveme.base.BaseActivity
 import com.rong.map.saveme.manager.SPManager
+import com.rong.map.saveme.service.LockService
 import com.rong.map.saveme.utils.CstUtils
 
 class SplashActivity : BaseActivity() {
@@ -16,9 +17,9 @@ class SplashActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-//        startService(Intent(this@SplashActivity, LockService::class.java))
+        startService(Intent(this@SplashActivity, LockService::class.java))
         mIntent = Intent(this@SplashActivity
-                , SettingsActivity::class.java)
+                ,  SetMsgActivity::class.java)
         var msgData = SPManager.msgData
 
         mIntent = Intent(this@SplashActivity

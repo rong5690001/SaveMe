@@ -50,5 +50,6 @@ class SmApplication : Application() {
 
     companion object {
         lateinit var context: Context
+        lateinit var location: String
     }
 }

@@ -15,4 +15,6 @@
         android:textColor="@color/white"
         android:text="welcome"/>
 
+
+
 </android.support.constraint.ConstraintLayout>
