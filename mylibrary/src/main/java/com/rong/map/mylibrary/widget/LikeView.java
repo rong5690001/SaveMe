@@ -105,12 +105,14 @@ public class LikeView extends ViewGroup {
         rightTopTv = new TextView(getContext());
         rightTopTv.setText("rightTop");
         rightTopTv.setTextColor(Color.WHITE);
+        rightTopTv.setVisibility(INVISIBLE);
         rightCenterTv = new TextView(getContext());
         rightCenterTv.setText("rightCenter");
         rightCenterTv.setTextColor(Color.WHITE);
         rightBottomTv = new TextView(getContext());
         rightBottomTv.setText("rightBottom");
         rightBottomTv.setTextColor(Color.WHITE);
+        rightBottomTv.setVisibility(INVISIBLE);
         addView(leftTv);
         addView(rightTopTv);
         addView(rightCenterTv);
@@ -141,17 +143,20 @@ public class LikeView extends ViewGroup {
     }
 
     public void likeOrUnLike(boolean like) {
-        rightTopTv.clearAnimation();
-        rightCenterTv.clearAnimation();
-        rightBottomTv.clearAnimation();
+        animationUp.cancel();
+        animationDown.cancel();
         if (like) {
             currentValue = rightBottomTv.getText().toString();
+            animationUp.setAnimationListener(animationListener);
             rightCenterTv.startAnimation(animationUp);
+            rightTopTv.setVisibility(INVISIBLE);
             rightBottomTv.setVisibility(VISIBLE);
             rightBottomTv.startAnimation(animationUp);
         } else {
             currentValue = rightTopTv.getText().toString();
+            animationDown.setAnimationListener(animationListener);
             rightTopTv.startAnimation(animationDown);
+            rightBottomTv.setVisibility(INVISIBLE);
             rightTopTv.setVisibility(VISIBLE);
             rightCenterTv.startAnimation(animationDown);
         }
@@ -162,6 +167,7 @@ public class LikeView extends ViewGroup {
     private Animation animationDown;
 
     private Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+
         @Override
         public void onAnimationStart(Animation animation) {
 
