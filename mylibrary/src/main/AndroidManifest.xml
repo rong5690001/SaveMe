@@ -3,7 +3,8 @@
     package="com.rong.map.mylibrary">
 
     <application>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".TestActivity" />
+        <activity android:name=".ListActivity"></activity>
     </application>
 
 </manifest>
